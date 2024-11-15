@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotation infinie d'image</title>
+    <style>
+        #img {
+            width: 300px;
+        }
+
+        .rotate {
+            animation: infinite-rotation 2s linear infinite; /* Animation infinie */
+        }
+
+        @keyframes infinite-rotation {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes infinite-rotation {from {transform: rotate(0deg);}to {transform: rotate(360deg);}}
+    </style>
+</head>
+<body>
+    <img id="img" src="propeller.png" alt="Exemple d'image">
+
+    <button onclick="startRotation()">Lancer la rotation</button>
+    <button onclick="stopRotation()">Arrêter la rotation</button>
+
+    <script>
+        function startRotation() {
+            document.getElementById('img').classList.add('rotate');
+            console.log("OKOK")
+        }
+
+        function stopRotation() {
+            document.getElementById('img').classList.remove('rotate');
+        }
+    </script>
+</body>
+
+<script>
+
+    
+        // window.onload = function() {
+            const checkInterval = 2000; // Intervalle de vérification en millisecondes (2 secondes)
+            const maxDuration = 3 * 60 * 1000; // Durée maximale de 3 minutes en millisecondes
+            let checking = true;
+                console.log('OKOK');
+
+            // Arrêter la vérification après 3 minutes
+            setTimeout(() => {
+                checking = false;
+                console.log('Vérification arrêtée après 3 minutes');
+            }, maxDuration);
+
+            function checkDbStatus() {
+                if (!checking) return; // Arrête l'exécution si la durée maximale est atteinte
+
+
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('GET', 'http://localhost/refuge-enfant/public/api/getPayement', true);
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            const data = JSON.parse(xhr.responseText);
+                            console.log('Données reçues:', data);
+                            if (data.status === 'success') {
+                                console.log('Statut de succès:', data.data);
+                            } else {
+                                console.log('En attente de données...');
+                            setTimeout(checkDbStatus, checkInterval); // Re-vérifie après l'intervalle
+                            }
+                        } else if (xhr.readyState === 4) {
+                            console.error('Erreur de requête:', xhr.status);
+                        }
+                    };
+                    xhr.send();
+/*
+
+                fetch('http://localhost/refuge-enfant/public/getPayement')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            // alert('Données trouvées : ' + JSON.stringify(data.data));
+                            // window.location.href = '/next-page'; // Redirige vers une autre page
+                            status = JSON.stringify(data.data);
+                            console.log("data")
+                            console.log(status)
+                        } else {
+                            console.log('En attente de données...');
+                            setTimeout(checkDbStatus, checkInterval); // Re-vérifie après l'intervalle
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erreur lors de la vérification :', error);
+                    });*/
+            }
+
+            // checkDbStatus();
+            // Démarrer la vérification après le chargement de la page et un délai de 2 secondes
+            setTimeout(checkDbStatus, 2000);
+        // };
+
+    </script>
+</html>
+
+
+<!-- 
+
+function myFunction() {
+  timeout = setTimeout(alertFunc, 3000);
+}
+myFunction();
+function alertFunc() {
+  var xhttp = new XMLHttpRequest();
+  console.log("xhttp.responseText");
+xhttp.onreadystatechange = function() {
+    console.log("xhttp.responseText");
+    if (this.readyState == 4 && this.status == 200) {
+       // Typical action to be performed when the document is ready:
+       // document.getElementById("demo").innerHTML = xhttp.responseText;
+        console.log("xhttp.responseText");
+        console.log(xhttp.responseText);
+        // alert(xhttp.responseText);
+        // console.log("Hello world!"); 
+    }
+};
+xhttp.open("GET", "http://127.0.0.1:8000/api/getPayement", true);
+xhttp.send();
+}
+
+
+ -->
